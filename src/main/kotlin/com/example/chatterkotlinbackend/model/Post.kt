@@ -16,8 +16,6 @@ import java.util.*
 data class Post(
     @Id @Column(name = "id") var id: String = UUID.randomUUID().toString(),
 
-    @Column(name = "title") var title: String? = null,
-
     @Column(name = "body") var body: String? = null,
 
     @Column(name = "image") var image: String? = null,
@@ -40,7 +38,7 @@ data class Post(
 
 ){
     override fun toString() : String {
-        return ( "Post(id=$id, title=$title, body=$body, createdAt=$createdAt, updatedAt=$updatedAt, author=$author)")
+        return ( "Post(id=$id, body=$body, createdAt=$createdAt, updatedAt=$updatedAt, author=$author)")
     }
 
 }

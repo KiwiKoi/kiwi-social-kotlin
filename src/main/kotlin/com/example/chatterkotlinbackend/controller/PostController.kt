@@ -110,9 +110,6 @@ class PostController {
             if(existingPost.isPresent){
                 val postToUpdate = existingPost.get()
 
-                if(postToUpdate.title != updatedPost.title){
-                    postToUpdate.title = updatedPost.title
-                }
                 if(postToUpdate.body != updatedPost.body){
                     postToUpdate.body = updatedPost.body
                 }
