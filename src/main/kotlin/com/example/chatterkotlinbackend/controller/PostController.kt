@@ -1,7 +1,7 @@
 package com.example.chatterkotlinbackend.controller
 
-import com.example.chatterkotlinbackend.model.Post
-import com.example.chatterkotlinbackend.model.User
+import com.example.chatterkotlinbackend.model.PostEntity
+import com.example.chatterkotlinbackend.model.UserEntity
 import com.example.chatterkotlinbackend.repository.PostRepository
 import com.example.chatterkotlinbackend.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,9 +21,9 @@ class PostController {
     lateinit var userRepository: UserRepository
 
     @GetMapping("/")
-    fun allPosts(): ResponseEntity<List<Post>> {
+    fun allPosts(): ResponseEntity<List<PostEntity>> {
         return try {
-            val posts: List<Post> = postRepository.findAll()
+            val posts: List<PostEntity> = postRepository.findAll()
             if (posts.isEmpty()) {
                 ResponseEntity(HttpStatus.NO_CONTENT)
             } else {
@@ -36,18 +36,18 @@ class PostController {
 
     @PostMapping
     fun createPost(
-        @RequestBody post: Post,
+        @RequestBody post: PostEntity,
         @RequestParam user_id: String
-    ): ResponseEntity<Post> {
+    ): ResponseEntity<PostEntity> {
         return try {
-            val author: Optional<User> = userRepository.findById(user_id)
+            val author: Optional<UserEntity> = userRepository.findById(user_id)
             if (author.isEmpty) {
                 return ResponseEntity(null, HttpStatus.BAD_REQUEST)
             }
             post.author = author.get()
             post.published = false
             post.createdAt = LocalDateTime.now()
-            val newPost: Post = postRepository.save(post)
+            val newPost: PostEntity = postRepository.save(post)
             ResponseEntity(newPost, HttpStatus.CREATED)
         } catch (e: RuntimeException) {
             println("Error saving post: ${e.message}")
@@ -56,8 +56,8 @@ class PostController {
     }
 
     @GetMapping("/{id}")
-    fun getPostById(@PathVariable id: String): ResponseEntity<Post> {
-        val postData: Optional<Post> = postRepository.findById(id)
+    fun getPostById(@PathVariable id: String): ResponseEntity<PostEntity> {
+        val postData: Optional<PostEntity> = postRepository.findById(id)
         return if (postData.isPresent) {
             ResponseEntity(postData.get(), HttpStatus.OK)
         } else {
@@ -66,9 +66,9 @@ class PostController {
     }
 
     @GetMapping("/user/{id}")
-    fun getPostsByUser(@PathVariable id: String): ResponseEntity<List<Post>> {
+    fun getPostsByUser(@PathVariable id: String): ResponseEntity<List<PostEntity>> {
         return try {
-            val posts: List<Post> = postRepository.findByAuthorId(id)
+            val posts: List<PostEntity> = postRepository.findByAuthorId(id)
             if (posts.isEmpty()) {
                 ResponseEntity(HttpStatus.NO_CONTENT)
             } else {
@@ -100,8 +100,8 @@ class PostController {
     @PutMapping("/{id}")
     fun updatePost(
         @PathVariable id: String,
-        @RequestBody updatedPost: Post
-    ): ResponseEntity<Post> {
+        @RequestBody updatedPost: PostEntity
+    ): ResponseEntity<PostEntity> {
         return try {
             val existingPost = postRepository.findById(id)
             println("ID: $id")

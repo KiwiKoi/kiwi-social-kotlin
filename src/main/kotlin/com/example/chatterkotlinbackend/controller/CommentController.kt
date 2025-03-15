@@ -1,8 +1,8 @@
 package com.example.chatterkotlinbackend.controller
 
-import com.example.chatterkotlinbackend.model.Comment
-import com.example.chatterkotlinbackend.model.Post
-import com.example.chatterkotlinbackend.model.User
+import com.example.chatterkotlinbackend.model.CommentEntity
+import com.example.chatterkotlinbackend.model.PostEntity
+import com.example.chatterkotlinbackend.model.UserEntity
 import com.example.chatterkotlinbackend.repository.CommentRepository
 import com.example.chatterkotlinbackend.repository.PostRepository
 import com.example.chatterkotlinbackend.repository.UserRepository
@@ -28,20 +28,20 @@ class CommentController {
 
     @PostMapping
     fun createComment(
-        @RequestBody comment: Comment,
+        @RequestBody comment: CommentEntity,
         @RequestParam user_id: String,
         @RequestParam postId: String,
-    ): ResponseEntity<Comment> {
+    ): ResponseEntity<CommentEntity> {
         return try{
-            val author: Optional<User> = userRepository.findById(user_id)
-            val post: Optional<Post> = postRepository.findById(postId)
+            val author: Optional<UserEntity> = userRepository.findById(user_id)
+            val post: Optional<PostEntity> = postRepository.findById(postId)
             if(author.isEmpty){
                 return ResponseEntity(null, HttpStatus.BAD_REQUEST)
             }
             comment.author = author.get()
             comment.post = post.get()
             comment.createdAt = LocalDateTime.now()
-            val newComment: Comment = commentRepository.save(comment)
+            val newComment: CommentEntity = commentRepository.save(comment)
             ResponseEntity(newComment, HttpStatus.CREATED)
         } catch (e: RuntimeException) {
             println("Error saving comment: ${e.message}")
@@ -52,9 +52,9 @@ class CommentController {
     @GetMapping("/{postId}")
     fun getCommentsByPost(
         @PathVariable("postId") postId: String
-    ): ResponseEntity<List<Comment>>{
+    ): ResponseEntity<List<CommentEntity>>{
         return try {
-            val comments: List<Comment> = commentRepository.findByPostId(postId)
+            val comments: List<CommentEntity> = commentRepository.findByPostId(postId)
 
             if (comments.isEmpty()) {
                 ResponseEntity(HttpStatus.NO_CONTENT)

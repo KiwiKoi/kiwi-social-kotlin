@@ -1,7 +1,7 @@
 package com.example.chatterkotlinbackend.repository
 
-import com.example.chatterkotlinbackend.model.User
+import com.example.chatterkotlinbackend.model.UserEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface  UserRepository : JpaRepository<User, String> {
+interface  UserRepository : JpaRepository<UserEntity, String> {
 }

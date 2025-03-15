@@ -1,4 +1,4 @@
-package com.example.chatterkotlinbackend.model
+package com.example.chatterkotlinbackend
 
 data class GoogleAuthUser(
     val uid: String,

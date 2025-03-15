@@ -13,7 +13,7 @@ import java.util.*
 
 @Entity
 @Table(name = "posts")
-data class Post(
+class PostEntity(
     @Id @Column(name = "id") var id: String = UUID.randomUUID().toString(),
 
     @Column(name = "body") var body: String? = null,
@@ -34,7 +34,7 @@ data class Post(
     @JsonIgnoreProperties("posts") @ManyToOne(
         fetch = FetchType.EAGER,
         cascade = [CascadeType.PERSIST, CascadeType.MERGE]
-    ) @JoinColumn(name = "user_id", referencedColumnName = "id") var author: User? = null
+    ) @JoinColumn(name = "user_id", referencedColumnName = "id") var author: UserEntity? = null
 
 ){
     override fun toString() : String {

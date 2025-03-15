@@ -1,7 +1,7 @@
 package com.example.chatterkotlinbackend.controller
 
-import com.example.chatterkotlinbackend.model.GoogleAuthUser
-import com.example.chatterkotlinbackend.model.User
+import com.example.chatterkotlinbackend.GoogleAuthUser
+import com.example.chatterkotlinbackend.model.UserEntity
 import com.example.chatterkotlinbackend.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -16,7 +16,7 @@ class UserController {
     lateinit var userRepository: UserRepository
 
     @GetMapping("/{userId}")
-    fun getUserById(@PathVariable userId: String): ResponseEntity<User> {
+    fun getUserById(@PathVariable userId: String): ResponseEntity<UserEntity> {
         return try {
             val userData = userRepository.findById(userId)
             userData.map { user -> ResponseEntity(user, HttpStatus.OK) }
@@ -29,22 +29,22 @@ class UserController {
     @PostMapping
     fun createUser(
         @RequestBody googleAuthUser: GoogleAuthUser,
-    ): ResponseEntity<User> {
+    ): ResponseEntity<UserEntity> {
         return try {
-            val newUser = User(id = googleAuthUser.uid, email = googleAuthUser.email)
+            val newUser = UserEntity(id = googleAuthUser.uid, email = googleAuthUser.email)
             val createdUser = userRepository.save(newUser)
             ResponseEntity(createdUser, HttpStatus.CREATED)
         } catch (e: RuntimeException) {
             println("Error saving user: ${e.message}")
-            ResponseEntity<User>(null, HttpStatus.INTERNAL_SERVER_ERROR)
+            ResponseEntity<UserEntity>(null, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
     @PutMapping("/{userId}")
     fun updateUser(
         @PathVariable userId: String,
-        @RequestBody updatedUser: User,
-    ): ResponseEntity<User> {
+        @RequestBody updatedUser: UserEntity,
+    ): ResponseEntity<UserEntity> {
         return try {
             val existingUser = userRepository.findById(userId)
             if (existingUser.isPresent) {

@@ -13,7 +13,7 @@ import java.util.*
 
 @Entity
 @Table(name = "comments")
-data class Comment(
+data class CommentEntity(
     @Id @Column(name = "id") var id: String = UUID.randomUUID().toString(),
     @Column(name = "body") var body: String? = null,
     @Column(name = "created_at")
@@ -28,12 +28,12 @@ data class Comment(
     @JsonIgnoreProperties("comments") @ManyToOne(
         fetch = FetchType.EAGER,
         cascade = [CascadeType.PERSIST, CascadeType.MERGE]
-    ) @JoinColumn(name = "user_id", referencedColumnName = "id") var author: User? = null,
+    ) @JoinColumn(name = "user_id", referencedColumnName = "id") var author: UserEntity? = null,
 
     @JsonIgnoreProperties("comments") @ManyToOne(
         fetch = FetchType.EAGER,
         cascade = [CascadeType.PERSIST, CascadeType.MERGE]
-    ) @JoinColumn(name = "post_id", referencedColumnName = "id") var post: Post? = null
+    ) @JoinColumn(name = "post_id", referencedColumnName = "id") var post: PostEntity? = null
 
 
 ) {

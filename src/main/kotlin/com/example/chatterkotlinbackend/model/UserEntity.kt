@@ -5,7 +5,7 @@ import java.util.*
 
 @Entity
 @Table(name = "users")
-data class User (
+class UserEntity (
     @Id
     @Column(name="id")
     var id: String = UUID.randomUUID().toString(),
@@ -27,7 +27,7 @@ data class User (
         fetch = FetchType.LAZY,
         cascade = [CascadeType.PERSIST, CascadeType.MERGE],
     )
-    var posts: MutableList<Post>? = null,
+    var posts: MutableList<PostEntity>? = null,
 //
 //
 //    @OneToMany(
