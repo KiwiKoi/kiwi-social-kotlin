@@ -1,9 +1,14 @@
 package com.example.chatterkotlinbackend.controller
 
-import com.example.chatterkotlinbackend.model.PostEntity
-import com.example.chatterkotlinbackend.model.UserEntity
+import com.example.chatterkotlinbackend.dto.PostCreationDTO
+import com.example.chatterkotlinbackend.dto.PostDTO
+import com.example.chatterkotlinbackend.entity.PostEntity
+import com.example.chatterkotlinbackend.entity.UserEntity
+import com.example.chatterkotlinbackend.mapper.PostMapper
 import com.example.chatterkotlinbackend.repository.PostRepository
 import com.example.chatterkotlinbackend.repository.UserRepository
+import com.example.chatterkotlinbackend.service.PostService
+import jakarta.persistence.EntityManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,60 +20,52 @@ import java.util.*
 @RequestMapping("/posts/")
 class PostController {
     @Autowired
-    lateinit var postRepository: PostRepository
+    private lateinit var postMapper: PostMapper
 
     @Autowired
-    lateinit var userRepository: UserRepository
+    private lateinit var postService: PostService
+
+    @Autowired
+    lateinit var postRepository: PostRepository
+
 
     @GetMapping("/")
-    fun allPosts(): ResponseEntity<List<PostEntity>> {
+    fun allPosts(): ResponseEntity<List<PostDTO>> {
         return try {
-            val posts: List<PostEntity> = postRepository.findAll()
+            val posts: List<PostDTO> = postRepository.findAll().map { postMapper.toDto(it) }
             if (posts.isEmpty()) {
                 ResponseEntity(HttpStatus.NO_CONTENT)
             } else {
                 ResponseEntity(posts, HttpStatus.OK)
             }
         } catch (e: Exception) {
-            ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR)
+            e.printStackTrace()
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(emptyList())
         }
     }
 
     @PostMapping
     fun createPost(
-        @RequestBody post: PostEntity,
-        @RequestParam user_id: String
-    ): ResponseEntity<PostEntity> {
-        return try {
-            val author: Optional<UserEntity> = userRepository.findById(user_id)
-            if (author.isEmpty) {
-                return ResponseEntity(null, HttpStatus.BAD_REQUEST)
-            }
-            post.author = author.get()
-            post.published = false
-            post.createdAt = LocalDateTime.now()
-            val newPost: PostEntity = postRepository.save(post)
-            ResponseEntity(newPost, HttpStatus.CREATED)
-        } catch (e: RuntimeException) {
-            println("Error saving post: ${e.message}")
-            ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+        @RequestBody post: PostCreationDTO,
+        @RequestParam userId: String
+    ): PostDTO {
+        return this.postService.createPost(post, userId)
     }
 
     @GetMapping("/{id}")
-    fun getPostById(@PathVariable id: String): ResponseEntity<PostEntity> {
+    fun getPostById(@PathVariable id: String): ResponseEntity<PostDTO> {
         val postData: Optional<PostEntity> = postRepository.findById(id)
         return if (postData.isPresent) {
-            ResponseEntity(postData.get(), HttpStatus.OK)
+            ResponseEntity(postMapper.toDto(postData.get()), HttpStatus.OK)
         } else {
             ResponseEntity(null, HttpStatus.NOT_FOUND)
         }
     }
 
     @GetMapping("/user/{id}")
-    fun getPostsByUser(@PathVariable id: String): ResponseEntity<List<PostEntity>> {
+    fun getPostsByUser(@PathVariable id: String): ResponseEntity<List<PostDTO>> {
         return try {
-            val posts: List<PostEntity> = postRepository.findByAuthorId(id)
+            val posts: List<PostDTO> = postRepository.findByAuthorId(id).map { postMapper.toDto(it) }
             if (posts.isEmpty()) {
                 ResponseEntity(HttpStatus.NO_CONTENT)
             } else {
@@ -92,7 +89,7 @@ class PostController {
                 ResponseEntity(null, HttpStatus.NOT_FOUND)
             }
 
-        } catch (e: Exception){
+        } catch (e: Exception) {
             ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -107,19 +104,17 @@ class PostController {
             println("ID: $id")
             println("EXISTING POST: $existingPost")
             println("UPDATED POST: $updatedPost")
-            if(existingPost.isPresent){
+            if (existingPost.isPresent) {
                 val postToUpdate = existingPost.get()
 
-                if(postToUpdate.body != updatedPost.body){
+                if (postToUpdate.body != updatedPost.body) {
                     postToUpdate.body = updatedPost.body
                 }
-                if(postToUpdate.image != updatedPost.image){
-                    postToUpdate.image = updatedPost.image
-                }
+
                 val updatedPostEntity = postRepository.save(postToUpdate)
                 ResponseEntity(updatedPostEntity, HttpStatus.OK)
 
-            } else{
+            } else {
                 ResponseEntity(HttpStatus.NOT_FOUND)
             }
         } catch (e: Exception) {

@@ -9,7 +9,9 @@ import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.JwtDecoders
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
@@ -20,16 +22,20 @@ class SecurityConfig {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            .csrf{
+                it.disable()
+            }
             .authorizeHttpRequests { auth ->
-                // Allow the WebSocket connection to be accessed by authenticated users only
-//                auth.requestMatchers(AntPathRequestMatcher("/ws/**")).authenticated() // WebSocket endpoints
-                auth.anyRequest().permitAll()  // Other requests can be public
+                auth.anyRequest().permitAll()
             }
-            .oauth2ResourceServer { oauth2 ->
-                oauth2.jwt { jwt ->
-                    jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
-                }
-            }
+//            .oauth2ResourceServer { oauth2 ->
+//                oauth2.jwt { jwt ->
+//                    jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
+//                }
+//            }
+        http.cors { cors -> cors.configurationSource(corsConfigurationSource()) }
+
+
         return http.build()
     }
 
@@ -41,7 +47,20 @@ class SecurityConfig {
     @Bean
     fun jwtAuthenticationConverter(): JwtAuthenticationConverter {
         val jwtAuthenticationConverter = JwtAuthenticationConverter()
-        // You can configure custom authorities here if needed
         return jwtAuthenticationConverter
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration().apply {
+            allowedOriginPatterns = listOf("http://localhost:4200")
+            allowedMethods = listOf("POST", "GET", "PUT", "DELETE", "OPTIONS")
+            allowedHeaders = listOf("*")
+            allowCredentials = true
+        }
+
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
     }
 }

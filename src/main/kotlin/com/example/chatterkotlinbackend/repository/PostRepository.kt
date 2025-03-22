@@ -1,10 +1,10 @@
 package com.example.chatterkotlinbackend.repository
 
-import com.example.chatterkotlinbackend.model.PostEntity
+import com.example.chatterkotlinbackend.entity.PostEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-interface PostRepository : JpaRepository<PostEntity, Long?> {
+interface PostRepository : JpaRepository<PostEntity, String> {
     fun findById(id: String?): Optional<PostEntity>
     fun findByAuthorId(id: String?): List<PostEntity>
 }

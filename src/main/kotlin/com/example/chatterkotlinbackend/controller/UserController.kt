@@ -1,8 +1,12 @@
 package com.example.chatterkotlinbackend.controller
 
 import com.example.chatterkotlinbackend.GoogleAuthUser
-import com.example.chatterkotlinbackend.model.UserEntity
+import com.example.chatterkotlinbackend.dto.UserDTO
+import com.example.chatterkotlinbackend.entity.UserEntity
+import com.example.chatterkotlinbackend.mapper.UserMapper
 import com.example.chatterkotlinbackend.repository.UserRepository
+import com.example.chatterkotlinbackend.service.UserRepositoryService
+import com.example.chatterkotlinbackend.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,31 +17,27 @@ import org.springframework.web.bind.annotation.*
 class UserController {
 
     @Autowired
+    private lateinit var userService: UserService
+
+    @Autowired
     lateinit var userRepository: UserRepository
 
+    @Autowired
+    lateinit var userRepositoryService: UserRepositoryService
+
+    @Autowired
+    lateinit var mapper: UserMapper;
+
     @GetMapping("/{userId}")
-    fun getUserById(@PathVariable userId: String): ResponseEntity<UserEntity> {
-        return try {
-            val userData = userRepository.findById(userId)
-            userData.map { user -> ResponseEntity(user, HttpStatus.OK) }
-                .orElseGet { ResponseEntity(HttpStatus.NOT_FOUND) }
-        } catch (e: Exception) {
-            ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+    fun getUserById(@PathVariable userId: String): UserDTO {
+        return mapper.toDto(userRepositoryService.getUserById(userId))
     }
 
     @PostMapping
     fun createUser(
         @RequestBody googleAuthUser: GoogleAuthUser,
-    ): ResponseEntity<UserEntity> {
-        return try {
-            val newUser = UserEntity(id = googleAuthUser.uid, email = googleAuthUser.email)
-            val createdUser = userRepository.save(newUser)
-            ResponseEntity(createdUser, HttpStatus.CREATED)
-        } catch (e: RuntimeException) {
-            println("Error saving user: ${e.message}")
-            ResponseEntity<UserEntity>(null, HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+    ): UserDTO {
+        return userService.createUser(googleAuthUser);
     }
 
     @PutMapping("/{userId}")

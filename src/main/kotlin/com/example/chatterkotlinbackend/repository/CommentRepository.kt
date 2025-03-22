@@ -1,6 +1,6 @@
 package com.example.chatterkotlinbackend.repository
 
-import com.example.chatterkotlinbackend.model.CommentEntity
+import com.example.chatterkotlinbackend.entity.CommentEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface CommentRepository : JpaRepository<CommentEntity, Long?> {

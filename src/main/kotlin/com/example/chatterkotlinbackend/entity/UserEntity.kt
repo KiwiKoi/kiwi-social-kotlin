@@ -1,5 +1,6 @@
-package com.example.chatterkotlinbackend.model
+package com.example.chatterkotlinbackend.entity
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 import java.util.*
 
@@ -14,7 +15,7 @@ class UserEntity (
     var username: String? = null,
 
     @Column(name = "email", unique = true)
-    var email: String? = null,
+    var email: String,
 
     @Column(name = "firstname")
     var firstname: String? = null,
@@ -27,15 +28,21 @@ class UserEntity (
         fetch = FetchType.LAZY,
         cascade = [CascadeType.PERSIST, CascadeType.MERGE],
     )
+    @JsonBackReference
     var posts: MutableList<PostEntity>? = null,
-//
-//
-//    @OneToMany(
-//    mappedBy = "author",
-//    cascade = [CascadeType.ALL],
-//    orphanRemoval = true
-//    )
-//    var comments: MutableList<Comment>? = null
+
+    @OneToMany(mappedBy = "sender",cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    var messages: MutableList<MessageEntity>? = mutableListOf(),
+
+    @ManyToMany(mappedBy = "users")
+    var conversations: MutableSet<ConversationEntity> = mutableSetOf(),
+
+    @OneToMany(
+    mappedBy = "author",
+    orphanRemoval = true
+    )
+    @JsonBackReference
+    var comments: MutableSet<CommentEntity>? = null
 
 ) {
     override fun toString(): String {
