@@ -6,9 +6,9 @@ import java.util.*
 
 @Entity
 @Table(name = "users")
-class UserEntity (
+class UserEntity(
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     var id: String = UUID.randomUUID().toString(),
 
     @Column(name = "username")
@@ -31,15 +31,16 @@ class UserEntity (
     @JsonBackReference
     var posts: MutableList<PostEntity>? = null,
 
-    @OneToMany(mappedBy = "sender",cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @OneToMany(mappedBy = "sender", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @JsonBackReference
     var messages: MutableList<MessageEntity>? = mutableListOf(),
 
     @ManyToMany(mappedBy = "users")
     var conversations: MutableSet<ConversationEntity> = mutableSetOf(),
 
     @OneToMany(
-    mappedBy = "author",
-    orphanRemoval = true
+        mappedBy = "author",
+        orphanRemoval = true
     )
     @JsonBackReference
     var comments: MutableSet<CommentEntity>? = null

@@ -1,5 +1,6 @@
 package com.example.chatterkotlinbackend.entity
 
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
@@ -22,6 +23,7 @@ data class MessageEntity(
     @JsonProperty("sender")
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonManagedReference
     var sender: UserEntity,
 
     @NotNull
