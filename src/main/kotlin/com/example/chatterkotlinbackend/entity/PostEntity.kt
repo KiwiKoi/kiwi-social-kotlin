@@ -51,9 +51,9 @@ data class PostEntity(
     var comments: MutableList<CommentEntity> = mutableListOf(),
 
     ) {
-    override fun toString(): String {
-        return ("Post(id=$id, body=$body, createdAt=$createdAt, updatedAt=$updatedAt, author=$author)")
-    }
+//    override fun toString(): String {
+//        return ("Post(id=$id, body=$body, createdAt=$createdAt, updatedAt=$updatedAt, author=$author)")
+//    }
 
     class LocalDateTimeDeserializer : JsonDeserializer<LocalDateTime>() {
         override fun deserialize(parser: JsonParser, context: DeserializationContext): LocalDateTime {

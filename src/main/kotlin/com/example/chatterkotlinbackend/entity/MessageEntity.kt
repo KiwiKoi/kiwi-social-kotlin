@@ -9,17 +9,15 @@ import java.time.OffsetDateTime
 @Entity
 @Table(name = "messages")
 data class MessageEntity(
-    @NotNull @Id
-    @JsonProperty("id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    @Id
+    @Column(name = "id")
+    var id: String,
 
     @NotNull
     @JsonProperty("content")
     @Column(nullable = false)
     var content: String,
 
-    @NotNull
     @JsonProperty("sender")
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -29,6 +27,12 @@ data class MessageEntity(
     @NotNull
     @JsonProperty("timestamp")
     @Column(nullable = false, updatable = false)
-    val timestamp: OffsetDateTime = OffsetDateTime.now(),
+    var timestamp: OffsetDateTime = OffsetDateTime.now(),
 
-    )
+    @Column(name = "conversation_id")
+    var conversationId: String
+) {
+    override fun toString(): String {
+        return ("MessageEntity(id=$id, content=$content, sender=$sender, timestamp=$timestamp, conversationId=$conversationId)")
+    }
+}

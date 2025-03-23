@@ -33,6 +33,7 @@ class UserController {
         return mapper.toDto(userRepositoryService.getUserById(userId))
     }
 
+
     @PostMapping
     fun createUser(
         @RequestBody googleAuthUser: GoogleAuthUser,
@@ -50,16 +51,16 @@ class UserController {
             if (existingUser.isPresent) {
                 val userToUpdate = existingUser.get()
 
-                if(userToUpdate.email != updatedUser.email){
+                if (userToUpdate.email != updatedUser.email) {
                     userToUpdate.email = updatedUser.email
                 }
-                if(userToUpdate.username != updatedUser.username){
+                if (userToUpdate.username != updatedUser.username) {
                     userToUpdate.username = updatedUser.username
                 }
-                if(userToUpdate.firstname != updatedUser.firstname){
+                if (userToUpdate.firstname != updatedUser.firstname) {
                     userToUpdate.firstname = updatedUser.firstname
                 }
-                if(userToUpdate.lastname != updatedUser.lastname){
+                if (userToUpdate.lastname != updatedUser.lastname) {
                     userToUpdate.lastname = updatedUser.lastname
                 }
                 val updatedUserEntity = userRepository.save(userToUpdate)

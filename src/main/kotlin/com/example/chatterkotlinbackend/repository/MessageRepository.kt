@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface MessageRepository : JpaRepository<MessageEntity, Long>
+interface MessageRepository : JpaRepository<MessageEntity, String> {
+    fun findByConversationId(conversationId: String): List<MessageEntity>
+}

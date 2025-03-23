@@ -6,7 +6,7 @@ import java.util.*
 
 @Entity
 @Table(name = "users")
-class UserEntity(
+data class UserEntity(
     @Id
     @Column(name = "id")
     var id: String = UUID.randomUUID().toString(),
@@ -25,7 +25,6 @@ class UserEntity(
 
     @OneToMany(
         mappedBy = "author",
-        fetch = FetchType.LAZY,
         cascade = [CascadeType.PERSIST, CascadeType.MERGE],
     )
     @JsonBackReference
@@ -35,8 +34,8 @@ class UserEntity(
     @JsonBackReference
     var messages: MutableList<MessageEntity>? = mutableListOf(),
 
-    @ManyToMany(mappedBy = "users")
-    var conversations: MutableSet<ConversationEntity> = mutableSetOf(),
+    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
+    val contacts: MutableSet<ContactEntity> = mutableSetOf(),
 
     @OneToMany(
         mappedBy = "author",
@@ -45,8 +44,9 @@ class UserEntity(
     @JsonBackReference
     var comments: MutableSet<CommentEntity>? = null
 
+
 ) {
     override fun toString(): String {
-        return ("User(id=$id, username=$username, firstname=$firstname, lastname=$lastname, email=$email)")
+        return ("UserEntity(id=$id, username=$username, firstname=$firstname, lastname=$lastname, email=$email)")
     }
 }

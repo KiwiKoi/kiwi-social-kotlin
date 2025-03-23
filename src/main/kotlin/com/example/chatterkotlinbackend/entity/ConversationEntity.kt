@@ -5,13 +5,18 @@ import java.util.*
 
 @Entity
 @Table(name = "conversations")
-data class ConversationEntity (
+data class ConversationEntity(
     @Id
     @Column(name = "id") var id: String = UUID.randomUUID().toString(),
 
-    @ManyToMany
-    var users: MutableSet<UserEntity> = mutableSetOf(),
-
-    @OneToMany
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        cascade = [(CascadeType.ALL)],
+        orphanRemoval = true
+    )
+    @JoinColumn(name = "conversation_id")
     var messages: MutableSet<MessageEntity> = mutableSetOf(),
-){}
+
+    @Column(name = "contact_id")
+    var contactId: String
+) {}
