@@ -7,6 +7,7 @@ import com.example.chatterkotlinbackend.mapper.UserMapper
 import com.example.chatterkotlinbackend.repository.UserRepository
 import com.example.chatterkotlinbackend.service.UserRepositoryService
 import com.example.chatterkotlinbackend.service.UserService
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -45,7 +46,9 @@ class UserController {
     fun updateUser(
         @PathVariable userId: String,
         @RequestBody updatedUser: UserEntity,
+        request: HttpServletRequest
     ): ResponseEntity<UserEntity> {
+        println("Spring sees Content-Type: ${request.contentType}")
         return try {
             val existingUser = userRepository.findById(userId)
             if (existingUser.isPresent) {

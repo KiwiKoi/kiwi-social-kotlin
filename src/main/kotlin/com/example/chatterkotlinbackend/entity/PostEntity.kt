@@ -39,7 +39,7 @@ data class PostEntity(
         fetch = FetchType.LAZY,
         cascade = [CascadeType.PERSIST, CascadeType.MERGE],
     ) @JoinColumn(name = "authorId", referencedColumnName = "id")
-    @JsonManagedReference
+    @JsonManagedReference("user-posts")
     var author: UserEntity,
 
     @OneToMany(

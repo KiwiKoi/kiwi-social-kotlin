@@ -27,11 +27,11 @@ data class UserEntity(
         mappedBy = "author",
         cascade = [CascadeType.PERSIST, CascadeType.MERGE],
     )
-    @JsonBackReference
+    @JsonBackReference("user-posts")
     var posts: MutableList<PostEntity>? = null,
 
     @OneToMany(mappedBy = "sender", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    @JsonBackReference
+    @JsonBackReference("user-messages")
     var messages: MutableList<MessageEntity>? = mutableListOf(),
 
     @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
@@ -41,7 +41,7 @@ data class UserEntity(
         mappedBy = "author",
         orphanRemoval = true
     )
-    @JsonBackReference
+    @JsonBackReference("user-comments")
     var comments: MutableSet<CommentEntity>? = null
 
 

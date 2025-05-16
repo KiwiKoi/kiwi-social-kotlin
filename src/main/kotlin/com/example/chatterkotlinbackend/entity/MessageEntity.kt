@@ -21,7 +21,7 @@ data class MessageEntity(
     @JsonProperty("sender")
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonManagedReference
+    @JsonManagedReference("user-messages")
     var sender: UserEntity,
 
     @NotNull

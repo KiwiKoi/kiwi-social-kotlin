@@ -4,7 +4,7 @@ class UserDTO {
     var id: String = "exampleId";
     var username: String? = null;
     var email: String = "example@email.com";
-    var firstName: String? = null;
-    var lastName: String? = null;
+    var firstname: String? = null;
+    var lastname: String? = null;
     val contacts: List<ContactDTO>? = null;
 }

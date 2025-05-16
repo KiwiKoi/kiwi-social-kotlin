@@ -34,7 +34,7 @@ data class CommentEntity(
         fetch = FetchType.EAGER,
         cascade = [CascadeType.PERSIST, CascadeType.MERGE]
     )
-    @JsonManagedReference
+    @JsonManagedReference("user-comments")
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     var author: UserEntity,
 
