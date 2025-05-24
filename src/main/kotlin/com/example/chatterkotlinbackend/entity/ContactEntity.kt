@@ -2,6 +2,7 @@ package com.example.chatterkotlinbackend.entity
 
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
+import java.time.OffsetDateTime
 import java.util.*
 
 @Entity
@@ -13,27 +14,21 @@ data class ContactEntity(
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "user1_id")
-    val user1: UserEntity,
+    @JoinColumn(name = "requester_id")
+    val requester: UserEntity,
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "user2_id")
-    val user2: UserEntity,
+    @JoinColumn(name = "recipient_id")
+    val recipient: UserEntity,
 
     @Enumerated(EnumType.STRING)
-    var status: ContactStatus,
+    var status: ContactStatus = ContactStatus.PENDING,
 
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "conversation_id")
-    var conversation: ConversationEntity? = null
+    val createdAt: OffsetDateTime = OffsetDateTime.now()
+
 ) {
-
     enum class ContactStatus {
         PENDING, ACCEPTED, BLOCKED
-    }
-
-    override fun toString(): String {
-        return ("ContactEntity(id=$id, user1=$user1, user2=$user2,, status=$status, conversation=$conversation)")
     }
 }

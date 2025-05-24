@@ -29,10 +29,10 @@ data class MessageEntity(
     @Column(nullable = false, updatable = false)
     var timestamp: OffsetDateTime = OffsetDateTime.now(),
 
-    @Column(name = "conversation_id")
-    var conversationId: String
+    @Column(name = "chat_id")
+    var chatId: String
 ) {
     override fun toString(): String {
-        return ("MessageEntity(id=$id, content=$content, sender=$sender, timestamp=$timestamp, conversationId=$conversationId)")
+        return ("MessageEntity(id=$id, content=$content, sender=$sender, timestamp=$timestamp, chatId=$chatId)")
     }
 }

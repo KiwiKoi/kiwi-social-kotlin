@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ContactRepository : JpaRepository<ContactEntity, String> {
-    @EntityGraph(attributePaths = ["user1", "user2", "conversation"])
-    fun findByUser1IdOrUser2Id(user1Id: String, user2Id: String): List<ContactEntity>
-    fun findByUser1IdAndUser2Id(user1Id: String, user2Id: String): ContactEntity?
+    @EntityGraph(attributePaths = ["requester", "recipient"])
+    fun findByRequesterIdOrRecipientId(requesterId: String, recipientId: String): List<ContactEntity>
+    fun findByRequesterIdAndRecipientId(requesterId: String, recipientId: String): ContactEntity?
 }

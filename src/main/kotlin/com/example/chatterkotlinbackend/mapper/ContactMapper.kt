@@ -9,11 +9,12 @@ import org.mapstruct.Mapping
 interface ContactMapper {
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "user1.id", target = "user1Id")
-    @Mapping(source = "user2.id", target = "user2Id")
-    @Mapping(source = "user1.username", target = "user1Username")
-    @Mapping(source = "user2.username", target = "user2Username")
-    @Mapping(source = "conversation.id", target = "conversationId")
+    @Mapping(source = "requester.id", target = "requesterId")
+    @Mapping(source = "recipient.id", target = "recipientId")
+    @Mapping(source = "requester.username", target = "requesterUsername")
+    @Mapping(source = "recipient.username", target = "recipientUsername")
+    @Mapping(source = "status", target = "status")
+    @Mapping(source = "createdAt", target = "createdAt")
     fun toDTO(entity: ContactEntity): ContactDTO
 
     fun toDTO(entities: List<ContactEntity>): List<ContactDTO>

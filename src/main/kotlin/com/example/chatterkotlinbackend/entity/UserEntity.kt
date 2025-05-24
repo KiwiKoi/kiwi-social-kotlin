@@ -6,7 +6,7 @@ import java.util.*
 
 @Entity
 @Table(name = "users")
-data class UserEntity(
+class UserEntity(
     @Id
     @Column(name = "id")
     var id: String = UUID.randomUUID().toString(),
@@ -36,6 +36,9 @@ data class UserEntity(
 
     @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
     val contacts: MutableSet<ContactEntity> = mutableSetOf(),
+
+    @ManyToMany(mappedBy = "participants")
+    var chats: MutableSet<ChatEntity> = mutableSetOf(),
 
     @OneToMany(
         mappedBy = "author",

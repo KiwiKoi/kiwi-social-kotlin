@@ -1,10 +1,13 @@
 package com.example.chatterkotlinbackend.service
 
 import com.example.chatterkotlinbackend.dto.MessageDTO
+import com.example.chatterkotlinbackend.entity.ChatEntity
 import com.example.chatterkotlinbackend.mapper.MessageMapper
+import com.example.chatterkotlinbackend.repository.ChatRepository
 import com.example.chatterkotlinbackend.repository.MessageRepository
 import com.example.chatterkotlinbackend.repository.UserRepository
 import jakarta.transaction.Transactional
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -13,11 +16,12 @@ class ChatService(
     private val messageRepository: MessageRepository,
     private val userRepository: UserRepository,
     private val mapper: MessageMapper,
+    private val chatRepository: ChatRepository,
 ) {
 
     @Transactional
     fun saveMessage(dto: MessageDTO): MessageDTO {
-        if (dto.senderId.isBlank()) {
+        if (dto.senderId.isNullOrBlank()) {
             throw IllegalArgumentException("Sender ID cannot be null or empty")
         }
 
@@ -36,8 +40,37 @@ class ChatService(
     }
 
     @Transactional
-    fun getMessagesByConversationId(conversationId: String): List<MessageDTO> {
-        val messages = messageRepository.findByConversationId(conversationId) ?: emptyList()
+    fun getMessagesByChatId(chatId: String): List<MessageDTO> {
+        val messages = messageRepository.findByChatIdWithSender(chatId) ?: emptyList()
         return mapper.toDto(messages)
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    fun startChat(userId: String, participantIds: List<String>): ChatEntity {
+        val user = userRepository.findById(userId)
+            .orElseThrow { IllegalArgumentException("User not found") }
+
+        val users = userRepository.findAllById(participantIds).toMutableSet();
+        users.add(user);
+
+        val chat = ChatEntity()
+
+        users.forEach {
+            chat.participants.add(it)
+            it.chats.add(chat)
+        }
+
+        return chatRepository.save(chat)
+    }
+
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    fun getChat(participantId: String, chatId: String): ChatEntity {
+        return chatRepository.findByIdAndParticipantId(chatId, participantId)
+            .orElseThrow { AccessDeniedException("User is not part of the chat") }
+    }
+
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    fun getChats(userId: String): List<ChatEntity> {
+        return chatRepository.findAllByUserId(userId)
     }
 }

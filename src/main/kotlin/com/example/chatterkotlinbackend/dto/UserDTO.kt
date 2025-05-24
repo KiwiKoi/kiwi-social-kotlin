@@ -7,4 +7,5 @@ class UserDTO {
     var firstname: String? = null;
     var lastname: String? = null;
     val contacts: List<ContactDTO>? = null;
+    val chats: List<ChatDTO>? = null;
 }

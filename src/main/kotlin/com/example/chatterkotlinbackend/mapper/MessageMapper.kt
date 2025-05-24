@@ -13,13 +13,13 @@ interface MessageMapper {
     @Mapping(target = "content", source = "dto.content")
     @Mapping(target = "sender", source = "sender")
     @Mapping(target = "timestamp", source = "dto.timestamp")
-    @Mapping(target = "conversationId", source = "dto.conversationId")
+    @Mapping(target = "chatId", source = "dto.chatId")
     fun toEntity(dto: MessageDTO, sender: UserEntity): MessageEntity;
 
     @Mapping(source = "sender.id", target = "senderId")
     @Mapping(source = "content", target = "content")
     @Mapping(source = "timestamp", target = "timestamp")
-    @Mapping(source = "conversationId", target = "conversationId")
+    @Mapping(source = "chatId", target = "chatId")
     fun toDto(entity: MessageEntity): MessageDTO;
     fun toDto(entities: List<MessageEntity>): List<MessageDTO>;
 }

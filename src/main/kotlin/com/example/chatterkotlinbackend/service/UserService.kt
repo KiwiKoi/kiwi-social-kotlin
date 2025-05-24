@@ -15,4 +15,5 @@ class UserService(private val userRepository: UserRepository, private val mapper
         val createdUser = userRepository.save(newUser)
         return mapper.toDto(createdUser);
     }
+
 }

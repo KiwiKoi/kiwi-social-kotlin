@@ -1,7 +1,7 @@
 package com.example.chatterkotlinbackend.dto
 
-class ConversationDTO(
+class ChatDTO(
     var id: String,
     val messages: List<MessageDTO>,
-    var contactId: String
+    var participants: List<UserDTO>
 )

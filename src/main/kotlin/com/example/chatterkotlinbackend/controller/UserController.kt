@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/users/")
+@RequestMapping("/users")
 class UserController {
 
     @Autowired
@@ -28,6 +28,11 @@ class UserController {
 
     @Autowired
     lateinit var mapper: UserMapper;
+
+    @GetMapping("/")
+    fun getAllUsers(): List<UserDTO> {
+        return mapper.toDto(userRepository.findAll())
+    }
 
     @GetMapping("/{userId}")
     fun getUserById(@PathVariable userId: String): UserDTO {

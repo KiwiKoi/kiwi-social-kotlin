@@ -12,6 +12,5 @@ interface UserMapper {
     fun toEntity(dto: UserDTO): UserEntity;
 
     fun toDto(entity: UserEntity): UserDTO
-
-    fun toContactDto(contactEntity: ContactEntity): ContactDTO
+    fun toDto(entities: List<UserEntity>): List<UserDTO>
 }

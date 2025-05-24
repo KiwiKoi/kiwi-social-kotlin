@@ -4,8 +4,8 @@ import jakarta.persistence.*
 import java.util.*
 
 @Entity
-@Table(name = "conversations")
-data class ConversationEntity(
+@Table(name = "chats")
+data class ChatEntity(
     @Id
     @Column(name = "id") var id: String = UUID.randomUUID().toString(),
 
@@ -14,9 +14,15 @@ data class ConversationEntity(
         cascade = [(CascadeType.ALL)],
         orphanRemoval = true
     )
-    @JoinColumn(name = "conversation_id")
+    @JoinColumn(name = "chat_id")
     var messages: MutableSet<MessageEntity> = mutableSetOf(),
 
-    @Column(name = "contact_id")
-    var contactId: String
-) {}
+    @ManyToMany
+    @JoinTable(
+        name = "chat_participants",
+        joinColumns = [JoinColumn(name = "chat_id")],
+        inverseJoinColumns = [JoinColumn(name = "user_id")]
+    )
+    var participants: MutableSet<UserEntity> = mutableSetOf()
+) {
+}
