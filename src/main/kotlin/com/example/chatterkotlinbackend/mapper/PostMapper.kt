@@ -14,7 +14,6 @@ abstract class PostMapper {
     @Mapping(target = "favoritedBy", ignore = true)
     abstract fun toEntity(dto: PostDTO): PostEntity;
 
-    @Mapping(source = "author.id", target = "authorId")
     @Mapping(source = "favoritedBy", target = "favoritedBy", qualifiedByName = ["userToIdList"])
     abstract fun toDto(entity: PostEntity): PostDTO;
     abstract fun toDto(entities: List<PostEntity>): List<PostDTO>;
