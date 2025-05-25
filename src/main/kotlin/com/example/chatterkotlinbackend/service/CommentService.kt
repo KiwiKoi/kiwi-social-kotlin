@@ -4,6 +4,7 @@ import com.example.chatterkotlinbackend.dto.CommentCreationDTO
 import com.example.chatterkotlinbackend.dto.CommentDTO
 import com.example.chatterkotlinbackend.entity.CommentEntity
 import com.example.chatterkotlinbackend.mapper.CommentMapper
+import com.example.chatterkotlinbackend.mapper.UserMapper
 import com.example.chatterkotlinbackend.repository.CommentRepository
 import com.example.chatterkotlinbackend.repository.PostRepository
 import com.example.chatterkotlinbackend.repository.UserRepository

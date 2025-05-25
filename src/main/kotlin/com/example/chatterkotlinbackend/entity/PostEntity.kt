@@ -50,10 +50,11 @@ data class PostEntity(
     @JsonBackReference
     var comments: MutableList<CommentEntity> = mutableListOf(),
 
+    @ManyToMany(mappedBy = "favorites")
+    @JsonBackReference
+    var favoritedBy: MutableList<UserEntity> = mutableListOf(),
+
     ) {
-//    override fun toString(): String {
-//        return ("Post(id=$id, body=$body, createdAt=$createdAt, updatedAt=$updatedAt, author=$author)")
-//    }
 
     class LocalDateTimeDeserializer : JsonDeserializer<LocalDateTime>() {
         override fun deserialize(parser: JsonParser, context: DeserializationContext): LocalDateTime {

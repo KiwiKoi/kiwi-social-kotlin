@@ -28,4 +28,34 @@ class PostService(
 
         return mapper.toDto(savedPost)
     }
+
+    fun favoritePost(postId: String, userId: String) {
+        val post = postRepository.findById(postId).orElseThrow { RuntimeException("Post not found") }
+        val user = userRepository.findById(userId).orElseThrow { RuntimeException("User not found") }
+
+        if (post.favoritedBy.add(user)) {
+            user.favorites.add(post)
+            userRepository.save(user)
+        }
+    }
+
+    fun unfavoritePost(postId: String, userId: String) {
+        val post = postRepository.findById(postId).orElseThrow { RuntimeException("Post not found") }
+        val user = userRepository.findById(userId).orElseThrow { RuntimeException("User not found") }
+
+        if (post.favoritedBy.remove(user)) {
+            user.favorites.remove(post)
+            postRepository.save(post)
+        }
+    }
+
+    fun getFavoritesByUser(userId: String): List<PostEntity> {
+        val user = userRepository.findById(userId).orElseThrow { RuntimeException("User not found") }
+        return user.favorites.toList()
+    }
+
+    fun isPostFavoritedByUser(postId: String, userId: String): Boolean {
+        val post = postRepository.findById(postId).orElseThrow { RuntimeException("Post not found") }
+        return post.favoritedBy.any { it.id == userId }
+    }
 }

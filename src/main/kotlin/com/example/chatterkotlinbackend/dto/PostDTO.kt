@@ -12,5 +12,6 @@ class PostDTO(
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     var updatedAt: LocalDateTime? = null,
     var authorId: String,
-    var published: Boolean = false
+    var published: Boolean = false,
+    var favoritedBy: List<String> = ArrayList()
 )

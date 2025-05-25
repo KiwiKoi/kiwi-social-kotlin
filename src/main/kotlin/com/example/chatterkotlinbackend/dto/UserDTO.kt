@@ -8,4 +8,5 @@ class UserDTO {
     var lastname: String? = null;
     val contacts: List<ContactDTO>? = null;
     val chats: List<ChatDTO>? = null;
+    var favorites: List<String> = ArrayList();
 }

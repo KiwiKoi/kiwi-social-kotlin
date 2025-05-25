@@ -5,10 +5,10 @@ import com.example.chatterkotlinbackend.entity.CommentEntity
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = [UserMapper::class])
 interface CommentMapper {
 
-    @Mapping(source = "author.id", target = "authorId")
     @Mapping(source = "post.id", target = "postId")
     fun toDto(entity: CommentEntity): CommentDTO
+    fun toDto(entities: List<CommentEntity>): List<CommentDTO>
 }

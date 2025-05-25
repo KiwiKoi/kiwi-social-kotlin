@@ -3,6 +3,7 @@ package com.example.chatterkotlinbackend.controller
 import com.example.chatterkotlinbackend.dto.CommentCreationDTO
 import com.example.chatterkotlinbackend.dto.CommentDTO
 import com.example.chatterkotlinbackend.entity.CommentEntity
+import com.example.chatterkotlinbackend.mapper.CommentMapper
 import com.example.chatterkotlinbackend.repository.CommentRepository
 import com.example.chatterkotlinbackend.service.CommentService
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +20,9 @@ class CommentController {
     @Autowired
     lateinit var commentRepository: CommentRepository
 
+    @Autowired
+    lateinit var commentMapper: CommentMapper;
+
 
     @PostMapping
     fun createComment(
@@ -32,9 +36,9 @@ class CommentController {
     @GetMapping("/{postId}")
     fun getCommentsByPost(
         @PathVariable("postId") postId: String
-    ): ResponseEntity<List<CommentEntity>> {
+    ): ResponseEntity<List<CommentDTO>> {
         return try {
-            val comments: List<CommentEntity> = commentRepository.findByPostId(postId)
+            val comments: List<CommentDTO> = commentRepository.findByPostId(postId).map { commentMapper.toDto(it) }
 
             if (comments.isEmpty()) {
                 ResponseEntity(HttpStatus.NO_CONTENT)

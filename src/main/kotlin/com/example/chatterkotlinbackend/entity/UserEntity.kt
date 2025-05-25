@@ -1,6 +1,7 @@
 package com.example.chatterkotlinbackend.entity
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
 import java.util.*
 
@@ -45,8 +46,16 @@ class UserEntity(
         orphanRemoval = true
     )
     @JsonBackReference("user-comments")
-    var comments: MutableSet<CommentEntity>? = null
+    var comments: MutableSet<CommentEntity>? = null,
 
+    @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @JoinTable(
+        name = "users_favorites",
+        joinColumns = [JoinColumn(name = "user_entity_id")],
+        inverseJoinColumns = [JoinColumn(name = "favorites_id")]
+    )
+    @JsonManagedReference
+    val favorites: MutableSet<PostEntity> = mutableSetOf()
 
 ) {
     override fun toString(): String {

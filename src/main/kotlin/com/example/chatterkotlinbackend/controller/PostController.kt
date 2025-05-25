@@ -17,7 +17,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 @RestController
-@RequestMapping("/posts/")
+@RequestMapping("/posts")
 class PostController {
     @Autowired
     private lateinit var postMapper: PostMapper
@@ -121,4 +121,31 @@ class PostController {
             ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
+
+    @PostMapping("/{postId}/favorite")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun favoritePost(
+        @PathVariable postId: String,
+        @RequestParam userId: String
+    ) {
+        postService.favoritePost(postId, userId)
+    }
+
+    @DeleteMapping("/{postId}/favorite")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun unfavoritePost(
+        @PathVariable postId: String,
+        @RequestParam userId: String
+    ) = postService.unfavoritePost(postId, userId)
+
+    @GetMapping("/favorites")
+    fun getUserFavorites(@RequestParam userId: String): List<PostDTO> {
+      return  postMapper.toDto(postService.getFavoritesByUser(userId))
+    }
+
+    @GetMapping("/{postId}/is-favorited")
+    fun isFavorited(
+        @PathVariable postId: String,
+        @RequestParam userId: String
+    ): Boolean = postService.isPostFavoritedByUser(postId, userId)
 }

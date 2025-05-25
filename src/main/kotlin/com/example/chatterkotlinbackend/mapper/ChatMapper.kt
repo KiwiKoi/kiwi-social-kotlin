@@ -4,7 +4,7 @@ import com.example.chatterkotlinbackend.dto.ChatDTO
 import com.example.chatterkotlinbackend.entity.ChatEntity
 import org.mapstruct.Mapper
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",  uses = [UserMapper::class])
 interface ChatMapper {
 
     fun toEntity(dto: ChatDTO): ChatEntity
