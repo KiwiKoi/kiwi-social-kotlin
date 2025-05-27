@@ -9,4 +9,6 @@ class UserDTO {
     val contacts: List<ContactDTO>? = null;
     val chats: List<ChatDTO>? = null;
     var favorites: List<String> = ArrayList();
+    var likedPosts: List<String> = ArrayList();
+    var dislikedPosts: List<String> = ArrayList();
 }

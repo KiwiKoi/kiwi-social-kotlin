@@ -58,4 +58,51 @@ class PostService(
         val post = postRepository.findById(postId).orElseThrow { RuntimeException("Post not found") }
         return post.favoritedBy.any { it.id == userId }
     }
+
+    fun addLike(postId: String, userId: String) {
+        val post = postRepository.findById(postId).orElseThrow()
+        val user = userRepository.findById(userId).orElseThrow()
+
+
+        if (post.likedByUsers.add(user)) {
+            user.likedPosts.add(post)
+            user.dislikedPosts.remove(post)
+            post.dislikedByUsers.remove(user)
+            userRepository.save(user)
+        }
+    }
+
+    fun removeLike(postId: String, userId: String) {
+        val post = postRepository.findById(postId).orElseThrow { RuntimeException("Post not found") }
+        val user = userRepository.findById(userId).orElseThrow { RuntimeException("User not found") }
+
+        if (post.likedByUsers.remove(user)) {
+            user.likedPosts.remove(post)
+            postRepository.save(post)
+        }
+    }
+
+    fun addDislike(postId: String, userId: String) {
+        val post = postRepository.findById(postId).orElseThrow()
+        val user = userRepository.findById(userId).orElseThrow()
+
+        if (post.dislikedByUsers.add(user)) {
+            user.dislikedPosts.add(post)
+            user.likedPosts.remove(post)
+            post.likedByUsers.remove(user)
+            userRepository.save(user)
+        }
+    }
+
+    fun removeDislike(postId: String, userId: String) {
+        val post = postRepository.findById(postId).orElseThrow { RuntimeException("Post not found") }
+        val user = userRepository.findById(userId).orElseThrow { RuntimeException("User not found") }
+
+        if (post.dislikedByUsers.remove(user)) {
+            user.dislikedPosts.remove(post)
+            postRepository.save(post)
+        }
+    }
+
+
 }

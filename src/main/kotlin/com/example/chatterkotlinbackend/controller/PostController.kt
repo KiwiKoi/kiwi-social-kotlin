@@ -148,4 +148,41 @@ class PostController {
         @PathVariable postId: String,
         @RequestParam userId: String
     ): Boolean = postService.isPostFavoritedByUser(postId, userId)
+
+    @PostMapping("/{postId}/like")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun addLike(
+        @PathVariable postId: String,
+        @RequestParam userId: String
+    ) {
+        postService.addLike(postId, userId)
+    }
+
+    @DeleteMapping("/{postId}/like")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun removeLike(
+        @PathVariable postId: String,
+        @RequestParam userId: String
+    ) {
+        postService.removeLike(postId, userId)
+    }
+
+
+    @PostMapping("/{postId}/dislike")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun addDislike(
+        @PathVariable postId: String,
+        @RequestParam userId: String
+    ) {
+        postService.addDislike(postId, userId)
+    }
+
+    @DeleteMapping("/{postId}/dislike")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun removeDislike(
+        @PathVariable postId: String,
+        @RequestParam userId: String
+    ) {
+        postService.removeDislike(postId, userId)
+    }
 }

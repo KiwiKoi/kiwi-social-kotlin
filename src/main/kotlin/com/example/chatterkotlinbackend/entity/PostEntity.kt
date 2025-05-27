@@ -54,7 +54,13 @@ data class PostEntity(
     @JsonBackReference
     var favoritedBy: MutableList<UserEntity> = mutableListOf(),
 
-    ) {
+    @ManyToMany(mappedBy = "likedPosts")
+    val likedByUsers: MutableList<UserEntity> = mutableListOf(),
+
+    @ManyToMany(mappedBy = "dislikedPosts")
+    val dislikedByUsers: MutableList<UserEntity> = mutableListOf()
+
+) {
 
     class LocalDateTimeDeserializer : JsonDeserializer<LocalDateTime>() {
         override fun deserialize(parser: JsonParser, context: DeserializationContext): LocalDateTime {

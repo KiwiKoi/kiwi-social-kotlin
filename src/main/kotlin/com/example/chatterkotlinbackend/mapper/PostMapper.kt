@@ -12,9 +12,13 @@ import org.mapstruct.Named
 abstract class PostMapper {
 
     @Mapping(target = "favoritedBy", ignore = true)
+    @Mapping(target = "likedByUsers", ignore = true)
+    @Mapping(target = "dislikedByUsers", ignore = true)
     abstract fun toEntity(dto: PostDTO): PostEntity;
 
     @Mapping(source = "favoritedBy", target = "favoritedBy", qualifiedByName = ["userToIdList"])
+    @Mapping(source = "likedByUsers", target = "likedByUsers", qualifiedByName = ["userToIdList"])
+    @Mapping(source = "dislikedByUsers", target = "dislikedByUsers", qualifiedByName = ["userToIdList"])
     abstract fun toDto(entity: PostEntity): PostDTO;
     abstract fun toDto(entities: List<PostEntity>): List<PostDTO>;
 

@@ -55,7 +55,23 @@ class UserEntity(
         inverseJoinColumns = [JoinColumn(name = "favorites_id")]
     )
     @JsonManagedReference
-    val favorites: MutableSet<PostEntity> = mutableSetOf()
+    val favorites: MutableSet<PostEntity> = mutableSetOf(),
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_likes",
+        joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "post_id")]
+    )
+    val likedPosts: MutableSet<PostEntity> = mutableSetOf(),
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_dislikes",
+        joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "post_id")]
+    )
+    val dislikedPosts: MutableSet<PostEntity> = mutableSetOf()
 
 ) {
     override fun toString(): String {

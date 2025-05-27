@@ -13,9 +13,13 @@ import org.mapstruct.Named
 abstract class UserMapper {
 
     @Mapping(target = "favorites", ignore = true)
+    @Mapping(target = "likedPosts", ignore = true)
+    @Mapping(target = "dislikedPosts", ignore = true)
     abstract fun toEntity(dto: UserDTO): UserEntity;
 
     @Mapping(source = "favorites", target = "favorites", qualifiedByName = ["postToIdList"])
+    @Mapping(source = "likedPosts", target = "likedPosts", qualifiedByName = ["postToIdList"])
+    @Mapping(source = "dislikedPosts", target = "dislikedPosts", qualifiedByName = ["postToIdList"])
     abstract fun toDto(entity: UserEntity): UserDTO
     abstract fun toDto(entities: List<UserEntity>): List<UserDTO>
 

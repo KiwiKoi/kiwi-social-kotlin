@@ -13,5 +13,7 @@ class PostDTO(
     var updatedAt: LocalDateTime? = null,
     var author: UserBasicDTO,
     var published: Boolean = false,
-    var favoritedBy: List<String> = ArrayList()
+    var favoritedBy: List<String> = ArrayList(),
+    var likedByUsers: List<String> = ArrayList(),
+    var dislikedByUsers: List<String> = ArrayList(),
 )
