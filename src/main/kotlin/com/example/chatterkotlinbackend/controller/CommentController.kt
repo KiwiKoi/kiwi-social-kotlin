@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/comments/")
+@RequestMapping("/comments")
 class CommentController {
     @Autowired
     private lateinit var commentService: CommentService

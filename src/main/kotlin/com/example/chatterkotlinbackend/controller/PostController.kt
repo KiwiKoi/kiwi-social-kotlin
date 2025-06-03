@@ -29,7 +29,7 @@ class PostController {
     lateinit var postRepository: PostRepository
 
 
-    @GetMapping("/")
+    @GetMapping
     fun allPosts(): ResponseEntity<List<PostDTO>> {
         return try {
             val posts: List<PostDTO> = postRepository.findAll().map { postMapper.toDto(it) }

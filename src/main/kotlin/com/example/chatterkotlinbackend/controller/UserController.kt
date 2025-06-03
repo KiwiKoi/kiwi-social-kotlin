@@ -29,7 +29,7 @@ class UserController {
     @Autowired
     lateinit var mapper: UserMapper;
 
-    @GetMapping("/")
+    @GetMapping
     fun getAllUsers(): List<UserDTO> {
         return mapper.toDto(userRepository.findAll())
     }

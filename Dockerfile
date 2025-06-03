@@ -1,17 +1,9 @@
-FROM ubuntu:latest
-LABEL authors="daniel"
+FROM eclipse-temurin:17-jre
 
-ENTRYPOINT ["top", "-b"]
+WORKDIR /app
 
-FROM postgres:latest
+COPY build/libs/*.jar app.jar
 
-# Set environment variables
-ENV POSTGRES_USER=daniel
-ENV POSTGRES_PASSWORD=daniel
-ENV POSTGRES_DB=chatter_db
+EXPOSE 8080
 
-# Copy initialization scripts
-COPY init.sql /docker-entrypoint-initdb.d/
-
-# Expose PostgreSQL port
-EXPOSE 5432
+ENTRYPOINT ["java", "-jar", "app.jar"]
